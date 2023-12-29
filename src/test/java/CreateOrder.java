@@ -1,23 +1,19 @@
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import ru.yandex.praktikum.pageObject.HomePage;
-import ru.yandex.praktikum.pageObject.OrderPage;
+import ru.praktikum.scooter.models.HomePage;
+import ru.praktikum.scooter.models.OrderPage;
 
 public class CreateOrder {
     @RunWith(Parameterized.class)
-    public static class CheckCreateOrderTest {
+    public static class CheckCreateOrderTest extends BaseTest {
 
         private final String name;
         private final String surname;
         private final String address;
         private final String phone;
         private final String date;
-        private WebDriver driver;
 
         public CheckCreateOrderTest(String name, String surname, String address, String phone, String date) {
             this.name = name;
@@ -39,20 +35,12 @@ public class CreateOrder {
 
         @Test
         public void checkCreateOrder() {
-            driver = new ChromeDriver();
-            driver.get("https://qa-scooter.praktikum-services.ru/");
             HomePage objHomePage = new HomePage(driver);
             objHomePage.clickHeaderOrderButton();
             OrderPage objOrderPage = new OrderPage(driver);
             objOrderPage.createOrder(name, surname, address, phone, date);
             String textHeader = objOrderPage.getTextPopupHeaderOrderConfirmed();
             Assert.assertTrue(textHeader.contains("Заказ оформлен"));
-
-        }
-
-        @After
-        public void tearDown() {
-            driver.quit();
         }
     }
 }
